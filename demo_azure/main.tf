@@ -47,7 +47,7 @@ module "nomad-client" {
   source              = "./compute"
   prefix              = var.prefix
   subnet_id           = azurerm_subnet.subnet.id
-  number              = 0
+  number              = 3
   type                = "nomad-client"
   vm_size             = "Standard_D2s_v3"
 
@@ -58,7 +58,7 @@ module "nomad-client" {
 
   gateway_connection  = false 
 
-  #cloud_init_template = data.template_cloudinit_config.stateful_config.rendered
+  cloud_init_template = data.template_cloudinit_config.nomad_client_config.rendered
   depends_on = [
     module.nomad-server,
   ]
@@ -72,9 +72,12 @@ data "template_file" "nomad_server_config" {
   template = file("nomad-server-init.tpl")
 }
 
-/* data "template_file" "nomad_client_config" {
+data "template_file" "nomad_client_config" {
   template = file("nomad-client-init.tpl")
-} */
+  vars = {
+    nomad_server   = module.nomad-server.gateway_private_ip[0]
+  }
+}
 
 data "template_cloudinit_config" "nomad_server_config" {
   gzip          = true
@@ -98,5 +101,10 @@ data "template_cloudinit_config" "nomad_client_config" {
   part {
     content_type = "text/cloud-config"
     content      = data.template_file.nomad_common_config.rendered
+  }
+
+  part {
+    content_type = "text/cloud-config"
+    content      = data.template_file.nomad_client_config.rendered
   }
 }

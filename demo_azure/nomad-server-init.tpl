@@ -13,14 +13,24 @@ cloud_final_modules:
 
 write_files:
   - content: |
+      data_dir = "/opt/nomad/data"
       server {
         enabled = true
         bootstrap_expect = 1
       }
-    path: /etc/nomad.d/server.hcl
+    path: /tmp/server.hcl
+    owner: root:root
     permissions: "0644"
+  - content: |
+      #!/bin/bash
+      cp /tmp/server.hcl /etc/nomad.d/server.hcl
+      rm /tmp/server.hcl
+      systemctl enable nomad
+      systemctl restart nomad
+    path: /tmp/nomad-server.sh
+    owner: root:root
+    permissions: "0700"
 
 runcmd:
-  - [sudo, systemctl, daemon-reload]
-  - [sudo, systemctl, enable, nomad]
-  - [sudo, systemctl, restart, nomad]
+  - [sudo, /tmp/nomad-server.sh]
+  - [sudo, rm, /tmp/nomad-server.sh]

@@ -1,8 +1,3 @@
-output "vm_ips" {
-  value       = azurerm_network_interface.generic-nic.*.private_ip_address
-  description = "IP Address array of the created virtual machines"
-}
-
 output "private_ip" {
   description = "IP address of server"
   value       = azurerm_network_interface.generic-nic[*].private_ip_address
