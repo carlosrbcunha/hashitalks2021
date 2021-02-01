@@ -40,14 +40,14 @@ module "nomad-server" {
 
   gateway_connection  = true 
 
-  #cloud_init_template = data.template_cloudinit_config.stateful_config.rendered
+  cloud_init_template = data.template_cloudinit_config.nomad_server_config.rendered
 }
 
 module "nomad-client" {
   source              = "./compute"
   prefix              = var.prefix
   subnet_id           = azurerm_subnet.subnet.id
-  number              = 3
+  number              = 0
   type                = "nomad-client"
   vm_size             = "Standard_D2s_v3"
 
@@ -64,4 +64,39 @@ module "nomad-client" {
   ]
 }
 
+data "template_file" "nomad_common_config" {
+  template = file("nomad-common-init.tpl")
+}
 
+data "template_file" "nomad_server_config" {
+  template = file("nomad-server-init.tpl")
+}
+
+/* data "template_file" "nomad_client_config" {
+  template = file("nomad-client-init.tpl")
+} */
+
+data "template_cloudinit_config" "nomad_server_config" {
+  gzip          = true
+  base64_encode = true
+
+  part {
+    content_type = "text/cloud-config"
+    content      = data.template_file.nomad_common_config.rendered
+  }
+
+  part {
+    content_type = "text/cloud-config"
+    content      = data.template_file.nomad_server_config.rendered
+  }
+}
+
+data "template_cloudinit_config" "nomad_client_config" {
+  gzip          = true
+  base64_encode = true
+
+  part {
+    content_type = "text/cloud-config"
+    content      = data.template_file.nomad_common_config.rendered
+  }
+}

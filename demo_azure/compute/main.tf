@@ -73,7 +73,7 @@ resource "azurerm_linux_virtual_machine" "generic-vm" {
   disable_password_authentication  = true
   admin_username                   = local.my_admin_user_name
   computer_name                    = "${local.my_name}-${count.index}"
-  #custom_data                      = var.cloud_init_template
+  custom_data                      = var.cloud_init_template
 
   source_image_reference {
     offer     = "0001-com-ubuntu-server-focal"
