@@ -1,0 +1,89 @@
+# https://github.com/github/gitignore
+
+# Compiled source  Byte-compiled / optimized
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+
+# Packages
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# Build Results
+target/
+
+# Logs and backups
+*.log
+*.backup
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE's related files
+.classpath
+.project
+.settings
+.idea
+.metadata
+*.iml
+*.ipr
+*.vscode
+*.devcontainer
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Distribution / packaging
+*.egg-info/
+eggs/
+.eggs/
+*.egg
+build/
+
+# Others
+*.retry
+**/.scannerwork/**
+*.pyc
+.vagrant/
+*.vdi
+*.pwd
+tmp
+.vagrant
+*.pem
+
+# Secrets file
+.secrets
+
+#Ignore ssh keys folder
+.ssh
+.ssh/*
+
+# terraform plan
+terraform.plan
+
+# Ignore all ssh keys
+id_rsa
