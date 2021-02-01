@@ -82,8 +82,11 @@ tmp
 .ssh
 .ssh/*
 
-# terraform plan
+# terraform
+.terraform
+.terraform/*
 terraform.plan
+**/terraform.tfstate*
 
 # Ignore all ssh keys
 id_rsa
