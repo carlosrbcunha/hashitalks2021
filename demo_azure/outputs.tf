@@ -10,7 +10,7 @@ output "nomad_clients" {
 
 output "gateway_ip_address" {
   description = "Ip address of Gateway"
-  value       = module.nomad-server.gateway_public_ip
+  value       = module.nomad-server.gateway_public_ip[0]
 }
 
 output "nomad_address" {
