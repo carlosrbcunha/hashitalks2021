@@ -25,6 +25,7 @@ write_files:
       #!/bin/bash
       cp /tmp/server.hcl /etc/nomad.d/server.hcl
       rm /tmp/server.hcl
+      rm /etc/nomad.d/nomad.hcl
       systemctl enable nomad
       systemctl restart nomad
     path: /tmp/nomad-server.sh

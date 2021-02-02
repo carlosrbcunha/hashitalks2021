@@ -72,7 +72,7 @@ resource "azurerm_linux_virtual_machine" "generic-vm" {
   network_interface_ids            = var.gateway_connection == true ? [azurerm_network_interface.generic-nic-with-external-ip[count.index].id] : [azurerm_network_interface.generic-nic[count.index].id]
   disable_password_authentication  = true
   admin_username                   = local.my_admin_user_name
-  computer_name                    = "${local.my_name}-${count.index}"
+  computer_name                    = "${var.type}-${count.index}"
   custom_data                      = var.cloud_init_template
 
   source_image_reference {

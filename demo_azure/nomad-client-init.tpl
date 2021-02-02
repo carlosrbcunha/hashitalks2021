@@ -36,11 +36,9 @@ write_files:
     owner: root:root
     permissions: "0644"
   - content: |
-      server_join {
-        retry_join = [ "${nomad_server}" ]
-      }
       client {
         enabled = true
+        servers = ["${nomad_server}"]
         options {
           "docker.cleanup.image.delay" = "96h"
         }
@@ -58,6 +56,7 @@ write_files:
         }
 
         allow_privileged = true
+        }
       }
     path: /tmp/client.hcl
     owner: root:root
@@ -75,7 +74,7 @@ write_files:
       apt-get -y -q -f --reinstall install docker-ce docker-ce-cli containerd.io
       apt-get autoremove --purge
       apt-get clean
-      curl -s -L -o cni-plugins.tgz "https://github.com/containernetworking/plugins/releases/download/0.9.0/cni-plugins-linux-amd64-0.9.0.tgz"
+      curl -s -L -o cni-plugins.tgz "https://github.com/containernetworking/plugins/releases/download/v0.9.0/cni-plugins-linux-amd64-v0.9.0.tgz"
       mkdir -p /opt/cni/bin
       tar -C /opt/cni/bin -xzf cni-plugins.tgz
       rm cni-plugins.tgz

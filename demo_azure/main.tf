@@ -108,3 +108,31 @@ data "template_cloudinit_config" "nomad_client_config" {
     content      = data.template_file.nomad_client_config.rendered
   }
 }
+
+resource "null_resource" "ssh_key_provision" {  
+    depends_on = [module.nomad-server.gateway_public_ip]
+    provisioner "file" {
+        content = tls_private_key.vm_ssh_key.private_key_pem
+        destination = "~/.ssh/id_rsa"
+
+        connection {
+            type         = "ssh"
+            user         = var.vm_username
+            private_key  = tls_private_key.vm_ssh_key.private_key_pem
+            host = module.nomad-server.gateway_public_ip[0]
+        }
+    }
+    provisioner "remote-exec" {
+        inline = [
+            "chmod 0600 ~/.ssh/id_rsa",
+            "sudo rm /etc/nomad.d/nomad.hcl",
+            "sudo systemctl restart nomad"
+        ]
+        connection {
+            type         = "ssh"
+            user         = var.vm_username
+            private_key  = tls_private_key.vm_ssh_key.private_key_pem
+            host = module.nomad-server.gateway_public_ip[0]
+        }
+  }
+}
