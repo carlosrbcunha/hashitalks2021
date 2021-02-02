@@ -27,7 +27,6 @@ write_files:
       rm /tmp/server.hcl
       rm /etc/nomad.d/nomad.hcl
       systemctl enable nomad
-      systemctl restart nomad
     path: /tmp/nomad-server.sh
     owner: root:root
     permissions: "0700"
