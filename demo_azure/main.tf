@@ -125,6 +125,7 @@ resource "null_resource" "ssh_key_provision" {
     provisioner "remote-exec" {
         inline = [
             "chmod 0600 ~/.ssh/id_rsa",
+            "while [ ! -f /etc/nomad.d/nomad.hcl ]; do sleep 2; done;",
             "sudo rm /etc/nomad.d/nomad.hcl",
             "sudo systemctl restart nomad"
         ]
