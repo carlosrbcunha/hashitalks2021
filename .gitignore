@@ -86,6 +86,8 @@ tmp
 .terraform
 .terraform/*
 terraform.plan
+*/terraform.tfstate
+*/terraform.tfstate*
 **/terraform.tfstate
 **/terraform.tfstate*
 
