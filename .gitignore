@@ -91,3 +91,6 @@ terraform.plan
 
 # Ignore all ssh keys
 id_rsa
+
+#Credential file
+creds
