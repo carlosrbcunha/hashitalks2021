@@ -86,6 +86,7 @@ tmp
 .terraform
 .terraform/*
 terraform.plan
+**/terraform.tfstate
 **/terraform.tfstate*
 
 # Ignore all ssh keys
