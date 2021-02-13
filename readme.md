@@ -17,7 +17,7 @@ After CSI is deployed we can deploy several applications:
 - **Postgres** with **PGAdmin** frontend
 
 ### Layout
-![Infrastructure layout](https://github.com/carlosrbcunha/hashitalks2021/blob/master/infra_layout.png?raw=true)
+![Infrastructure layout](https://github.com/carlosrbcunha/hashitalks2021/blob/master/infra_layout.jpg?raw=true)
 ### Pre-requisites
 
 - Terraform >= 0.13.6
