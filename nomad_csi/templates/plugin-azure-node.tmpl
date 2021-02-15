@@ -1,0 +1,65 @@
+job "plugin-azure-disk-nodes" {
+  datacenters = ["dc1"]
+
+  # you can run node plugins as service jobs as well, but this ensures
+  # that all nodes in the DC have a copy.
+  type = "system"
+
+  group "nodes" {
+    task "node" {
+      driver = "docker"
+
+      template {
+        change_mode = "noop"
+        destination = "local/azure.json"
+        data = <<EOH
+{
+"cloud":"AzurePublicCloud",
+"tenantId": "${tenant_id}",
+"subscriptionId": "${subscription_id}",
+"aadClientId": "${client_id}",
+"aadClientSecret": "${client_secret}",
+"resourceGroup": "${resource_group_name}",
+"location": "${location}"
+}
+EOH
+      }
+
+      env {
+        AZURE_CREDENTIAL_FILE = "/etc/kubernetes/azure.json"
+      }
+
+      config {
+        image = "mcr.microsoft.com/k8s/csi/azuredisk-csi:${csi_version}"
+
+        volumes = [
+          "local/azure.json:/etc/kubernetes/azure.json"
+        ]
+
+        args = [
+          "--nodeid=${prefix}-$${attr.unique.hostname}-vm",
+          "--endpoint=unix://csi/csi.sock",
+          "--logtostderr",
+          "--v=5",
+        ]
+
+        # node plugins must run as privileged jobs because they
+        # mount disks to the host
+        privileged = true
+      }
+
+      csi_plugin {
+        id        = "${csi_plugin_id}"
+        type      = "node"
+        mount_dir = "/csi"
+      }
+
+      resources {
+        memory = 256
+      }
+
+      # ensuring the plugin has time to shut down gracefully
+      kill_timeout = "2m"
+    }
+  }
+}

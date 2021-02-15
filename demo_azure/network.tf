@@ -39,7 +39,7 @@ resource "azurerm_network_security_rule" "subnet-nsg-AllowExternalAccess" {
   access                       = "Allow"
   protocol                     = "Tcp"
   source_port_range            = "*"
-  destination_port_ranges      = ["80", "443", "3000", "4646", "5601", "8080-8083", "8181", "8200", "8500", "9080", "9090", "9093", "20000-32000"]
+  destination_port_ranges      = ["4646","8500","80","8080","443"]
   source_address_prefixes      = var.external_ssh_allowed_access
   destination_address_prefixes = var.vnet_cidr
   description                  = "Allow http and ssh access to Gateway VM"
@@ -54,7 +54,7 @@ resource "azurerm_network_security_rule" "subnet-nsg-AllowInternalAccessTcp" {
   access                       = "Allow"
   protocol                     = "Tcp"
   source_port_range            = "*"
-  destination_port_ranges      = ["22", "80", "443", "53", "4646-4648", "8080-8083", "8181", "8200", "8300-8301", "8500", "8502", "8600", "9080", "9099", "9100", "20000-32000", "50000"]
+  destination_port_ranges      = ["22", "80", "443", "53", "4646-4648", "5432", "8080-8083", "8181", "8200", "8300-8301", "8500", "8502", "8600", "9080", "9099", "9100", "20000-32000", "50000"]
   source_address_prefixes      = var.vnet_cidr
   destination_address_prefixes = var.vnet_cidr
   description                  = "Allow http access to Gateway VM"

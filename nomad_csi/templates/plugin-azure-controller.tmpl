@@ -1,0 +1,68 @@
+job "plugin-azure-disk-controller" {
+  datacenters = ["dc1"]
+  type = "service"
+
+  group "controller" {
+    count = 2
+
+    constraint { # Don't deploy more than one instance on the same host
+      distinct_hosts = true
+    }
+
+    # disable deployments
+    update {
+      max_parallel = 0
+    }
+    task "controller" {
+      driver = "docker"
+
+      template {
+        change_mode = "noop"
+        destination = "local/azure.json"
+        data = <<EOH
+{
+"cloud":"AzurePublicCloud",
+"tenantId": "${tenant_id}",
+"subscriptionId": "${subscription_id}",
+"aadClientId": "${client_id}",
+"aadClientSecret": "${client_secret}",
+"resourceGroup": "${resource_group_name}",
+"location": "${location}"
+}
+EOH
+      }
+
+      env {
+        AZURE_CREDENTIAL_FILE = "/etc/kubernetes/azure.json"
+      }
+
+      config {
+        image = "mcr.microsoft.com/k8s/csi/azuredisk-csi:${csi_version}"
+
+        volumes = [
+          "local/azure.json:/etc/kubernetes/azure.json"
+        ]
+
+        args = [
+          "--nodeid=${prefix}-$${attr.unique.hostname}-vm",
+          "--endpoint=unix://csi/csi.sock",
+          "--logtostderr",
+          "--v=5",
+        ]
+      }
+
+      csi_plugin {
+        id        = "${csi_plugin_id}"
+        type      = "controller"
+        mount_dir = "/csi"
+      }
+
+      resources {
+        memory = 256
+      }
+
+      # ensuring the plugin has time to shut down gracefully
+      kill_timeout = "2m"
+    }
+  }
+}

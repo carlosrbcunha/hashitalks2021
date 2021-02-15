@@ -99,6 +99,5 @@ resource "azurerm_linux_virtual_machine" "generic-vm" {
     Prefix        = var.prefix
     Location      = var.location
     Terraform     = "true"
-    WorkHoursOnly = "false"
   }
 }
