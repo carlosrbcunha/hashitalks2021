@@ -5,8 +5,8 @@ job "plugin-azure-disk-nodes" {
   # that all nodes in the DC have a copy.
   type = "system"
 
-  group "csi_plugin_node" {
-    task "csi_driver" {
+  group "nodes" {
+    task "node" {
       driver = "docker"
 
       template {
@@ -15,12 +15,12 @@ job "plugin-azure-disk-nodes" {
         data = <<EOH
 {
 "cloud":"AzurePublicCloud",
-"tenantId": "${tenant_id}",
-"subscriptionId": "${subscription_id}",
-"aadClientId": "${client_id}",
-"aadClientSecret": "${client_secret}",
-"resourceGroup": "${resource_group_name}",
-"location": "${location}"
+"tenantId": "11111111-2222-3333-4444-555555555555",
+"subscriptionId": "11111111-2222-3333-4444-555555555555",
+"aadClientId": "11111111-2222-3333-4444-555555555555",
+"aadClientSecret": "qwertyuiopasdfghjklzxcvbnm123456",
+"resourceGroup": "HashiTalks-Demo",
+"location": "westeurope"
 }
 EOH
       }
@@ -30,14 +30,14 @@ EOH
       }
 
       config {
-        image = "mcr.microsoft.com/k8s/csi/azuredisk-csi:${csi_version}"
+        image = "mcr.microsoft.com/k8s/csi/azuredisk-csi:v0.9.0"
 
         volumes = [
           "local/azure.json:/etc/kubernetes/azure.json"
         ]
 
         args = [
-          "--nodeid=${prefix}-$${attr.unique.hostname}-vm",
+          "--nodeid=HashiTalks-Demo-${attr.unique.hostname}-vm",
           "--endpoint=unix://csi/csi.sock",
           "--logtostderr",
           "--v=5",
@@ -49,7 +49,7 @@ EOH
       }
 
       csi_plugin {
-        id        = "${csi_plugin_id}"
+        id        = "az-disk0"
         type      = "node"
         mount_dir = "/csi"
       }

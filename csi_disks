@@ -1,0 +1,12 @@
+managed_disks = [
+    {
+      "disk_size": 32,
+      "type": "Standard_LRS",
+      "volume_name": "postgres-sonar"
+    },
+    {
+      "disk_size": 32,
+      "type": "Standard_LRS",
+      "volume_name": "postgres-pgadmin"
+    }
+  ]

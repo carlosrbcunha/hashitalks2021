@@ -2,14 +2,18 @@ job "plugin-azure-disk-controller" {
   datacenters = ["dc1"]
   type = "service"
 
-  constraint {
-        attribute = "$${node.unique.name}"
-        operator  = "="
-        value     = "nomad-server-0"
-      }
+  group "controller" {
+    count = 2
 
-  group "csi_plugin_controller" {
-    task "csi_driver" {
+    constraint { # Don't deploy more than one instance on the same host
+      distinct_hosts = true
+    }
+
+    # disable deployments
+    update {
+      max_parallel = 0
+    }
+    task "controller" {
       driver = "docker"
 
       template {
@@ -18,12 +22,12 @@ job "plugin-azure-disk-controller" {
         data = <<EOH
 {
 "cloud":"AzurePublicCloud",
-"tenantId": "${tenant_id}",
-"subscriptionId": "${subscription_id}",
-"aadClientId": "${client_id}",
-"aadClientSecret": "${client_secret}",
-"resourceGroup": "${resource_group_name}",
-"location": "${location}"
+"tenantId": "11111111-2222-3333-4444-555555555555",
+"subscriptionId": "11111111-2222-3333-4444-555555555555",
+"aadClientId": "11111111-2222-3333-4444-555555555555",
+"aadClientSecret": "qwertyuiopasdfghjklzxcvbnm123456",
+"resourceGroup": "HashiTalks-Demo",
+"location": "westeurope"
 }
 EOH
       }
@@ -33,7 +37,7 @@ EOH
       }
 
       config {
-        image = "mcr.microsoft.com/k8s/csi/azuredisk-csi:${csi_version}"
+        image = "mcr.microsoft.com/k8s/csi/azuredisk-csi:latest"
 
         volumes = [
           "local/azure.json:/etc/kubernetes/azure.json"
@@ -47,7 +51,7 @@ EOH
       }
 
       csi_plugin {
-        id        = "${csi_plugin_id}"
+        id        = "az-disk0"
         type      = "controller"
         mount_dir = "/csi"
       }

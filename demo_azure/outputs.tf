@@ -14,6 +14,16 @@ output "gateway_ip_address" {
 }
 
 output "nomad_address" {
-    description = "Nomad Server URL"
-    value = "http://${module.nomad-server.gateway_public_ip[0]}:4646"
+  description = "Nomad Server URL"
+  value = "http://${module.nomad-server.gateway_public_ip[0]}:4646"
+}
+
+output "managed_disks" {
+  description = "CSI Managed Disk ID's"
+  value = module.csi-managed-disks.disks
+}
+
+output "rg_name" {
+  description = "Name of the resource group"
+  value = azurerm_resource_group.main-rg.name
 }

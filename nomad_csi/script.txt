@@ -1,0 +1,18 @@
+cd demo_azure
+terraform init
+terraform apply -var-file ../csi_disks -var-file ../creds  
+cd ../nomad_csi
+terraform apply -var-file ../csi_disks -var-file ../creds -var="infra=demo_azure"
+export NOMAD_ADDR=http://hashitalks2021.local:4646
+nomad status
+nomad job run -hcl1 nomad_jobs/traefik.nomad
+nomad job run -hcl1 nomad_jobs/postgresql.nomad
+nomad job run -hcl1 nomad_jobs/sonarqube.nomad
+
+consul catalog services
+
+nomad node drain -enable <node_id>
+
+
+
+
