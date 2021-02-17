@@ -27,6 +27,16 @@ After CSI is deployed we can deploy several applications:
 ### Deployment
 
 Fill out the **creds** file with your azure subscription details.
+Here is an example of the file
+
+```text
+client_id="11111111-2222-3333-4444-555555555555"
+client_secret="11111111-2222-3333-4444-555555555555"
+subscription_id="11111111-2222-3333-4444-555555555555"
+tenant_id="11111111-2222-3333-4444-555555555555"
+external_ssh_allowed_access=["1.2.3.4","1.2.3.5","1.2.4.0/22", "1.2.5.0/21"]
+```
+
 Verify the **csi_disks** file to check the managed disk that will be created.
 
 Navigate to folder demo_azure and execute the following commands:
