@@ -85,7 +85,7 @@ After this you can start deploying the applications, starting with **traefik**.
 
 ```bash
 nomad job run -hcl1 nomad_jobs/traefik.nomad
-nomad job run -hcl1 nomad_jobs/postgresql.nomad
+nomad job run -hcl1 nomad_jobs/pgadmin.nomad
 nomad job run -hcl1 nomad_jobs/sonarqube.nomad
 ```
 
@@ -95,4 +95,4 @@ You can navigate to the various application with this links
 - Consul UI : [http://hashitalks2021.local:8500](http://hashitalks2021.local:8500)
 - Traefik : [http://hashitalks2021.local:8080](http://hashitalks2021.local:8080)
 - Sonarqube : [http://sonarqube.hashitalks2021.local](http://sonarqube.hashitalks2021.local)
-- Postgres : [http://postgres.hashitalks2021.local](http://postgres.hashitalks2021.local)
+- PGAdmin : [http://pgadmin.hashitalks2021.local](http://pgadmin.hashitalks2021.local)
